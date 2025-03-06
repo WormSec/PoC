@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ["Build && test"]
+    types:
+      - completed
+  push:
+    branches:
+      - releases
+    paths-ignore:
+      - .gitignore
+      - README.md
+      - LICENSE
+    workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retreiving Release infos
+        id: release_infos
+        run: |
+          VERSION=$(sed -n 's/^version = "\([0-9.]*\)"/\1/p' Cargo.toml)
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-gnu, x86_64-pc-windows-gnu
+
+      - name: Install Windows Target (for cross-compilation)
+        run: rustup target add x86_64-pc-windows-gnu
+
+      - name: Build in Release Mode
+        run: cargo build --release
+
+      - name: Build Windows Binary
+        run: cargo build --release --target x86_64-pc-windows-gnu
+
+      - name: Archive Release Binary
+        run: |
+          mkdir -p release
+          cp target/release/wormsec-poc ./release/
+          tar -czvf ./wormsec-poc-${{ steps.release_infos.outputs.version }}.tar.gz -C release .
+          cp target/x86_64-pc-windows-gnu/release/wormsec-poc.exe wormsec-poc-windows.exe
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          title: ${{ steps.release_infos.outputs.version }}
+          tag: v${{ steps.release_infos.outputs.version }}
+          artifacts: ./wormsec-poc-${{ steps.release_infos.outputs.version }}.tar.gz wormsec-poc-windows.exe
