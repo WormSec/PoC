@@ -30,6 +30,8 @@ pub fn lock_ip(addr: IpAddr) -> Result<(), Box<dyn Error>>
 {
     let ip = addr.to_string();
 
+    println!("Locking IP {ip}");
+
     let rules = [
         vec!["-A", "INPUT", "-s", &ip, "-j", "DROP"],
         vec!["-A", "OUTPUT", "-d", &ip, "-j", "DROP"],
@@ -45,20 +47,20 @@ pub fn lock_ip(addr: IpAddr) -> Result<(), Box<dyn Error>>
     Ok(())
 }
 
-pub fn unlock_ip(addr: IpAddr) -> Result<(), Box<dyn Error>>
-{
-    let ip = addr.to_string();
-    let rules = [
-        vec!["-D", "INPUT", "-s", &ip, "-j", "DROP"],
-        vec!["-D", "OUTPUT", "-d", &ip, "-j", "DROP"],
-    ];
+// pub fn unlock_ip(addr: IpAddr) -> Result<(), Box<dyn Error>>
+// {
+//     let ip = addr.to_string();
+//     let rules = [
+//         vec!["-D", "INPUT", "-s", &ip, "-j", "DROP"],
+//         vec!["-D", "OUTPUT", "-d", &ip, "-j", "DROP"],
+//     ];
 
-    for rule in &rules {
-        execute_iptables_command(match addr {
-            IpAddr::V4(_) => true,
-            IpAddr::V6(_) => false,
-        }, rule)?;
-    }
+//     for rule in &rules {
+//         execute_iptables_command(match addr {
+//             IpAddr::V4(_) => true,
+//             IpAddr::V6(_) => false,
+//         }, rule)?;
+//     }
 
-    Ok(())
-}
+//     Ok(())
+// }

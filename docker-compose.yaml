@@ -1,0 +1,44 @@
+services:
+  target:
+    build:
+      context: ./
+    container_name: target
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.2
+
+  alpha:
+    build:
+      context: ./
+    container_name: alpha
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.3
+
+  bravo:
+    build:
+      context: ./
+    container_name: bravo
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.4
+
+  charlie:
+    build:
+      context: ./
+    container_name: charlie
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.5
+
+networks:
+  poc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.42.0.0/24
+          gateway: 172.42.0.1
