@@ -1,0 +1,47 @@
+.machine {
+    cursor: pointer;
+}
+
+.machine-circle-connected {
+    fill: #1a1a1a;
+    stroke: #00FF9D;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
+}
+
+.machine-circle-connected {
+    fill: #1a1a1a;
+    stroke: #00FF9D;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
+}
+
+.machine {
+    cursor: pointer;
+}
+
+.machine-circle-isolated {
+    fill: #1a1a1a;
+    stroke: #FF3333;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.5));
+}
+
+.machine-text {
+    font-weight: bold;
+    user-select: none;
+}
+
+.machine-text-connected {
+    fill: #00FF9D;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 157, 0.8);
+}
+
+.machine-text-isolated {
+    fill: #FF3333;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 51, 51, 0.8);
+}

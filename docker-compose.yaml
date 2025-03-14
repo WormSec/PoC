@@ -21,6 +21,8 @@ services:
     build:
       context: ./
     container_name: bravo
+    ports:
+      - "8080:21335"
     privileged: true
     networks:
       poc:

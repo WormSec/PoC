@@ -1,5 +1,7 @@
 use std::{io, net::{IpAddr, SocketAddr, UdpSocket}, str::FromStr, sync::{Arc, Mutex}, thread};
 
+use crate::state;
+
 pub type NetCallback = Arc<Mutex<Box<dyn Fn(IpAddr) + Send + 'static>>>;
 
 pub fn start_network_watcher(callback: NetCallback)
@@ -24,14 +26,14 @@ pub fn start_network_watcher(callback: NetCallback)
     });
 }
 
-pub fn broadcast(ips: &Vec<IpAddr>, text: &IpAddr) -> io::Result<()>
+pub async fn broadcast(text: &IpAddr) -> io::Result<()>
 {
     let socket = UdpSocket::bind("0.0.0.0:0")?;
 
     println!("Unusual action detected. Broadcasting info.");
 
-    for ip in ips {
-        let server = SocketAddr::new(*ip, 21335);
+    for machine in state::get_machines().await {
+        let server = SocketAddr::new(IpAddr::from_str(&machine.ip).unwrap(), 21335);
         socket.send_to(text.to_string().as_bytes(), server)?;
     }
 
