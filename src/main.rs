@@ -21,20 +21,16 @@ async fn main() -> Result<(), Box<dyn Error>>
     let my_ip = local_ip()?;
     let ips = read_ips_from_file("/app/ips.txt")?;
 
-    state::from_list(ips).await;
+    state::from_list(ips);
 
     println!("My IP: {my_ip}");
 
     let callback: Callback = Arc::new(Mutex::new(Box::new(move || {
-        task::spawn(async move {
-            broadcast(&my_ip).await.ok();
-        });
+        broadcast(&my_ip).ok();
     })));
 
     let net_callback: NetCallback = Arc::new(Mutex::new(Box::new(move |ip| {
-        task::spawn(async move {
-            change_machine_state(&ip.to_string(), "isolated").await;
-        });
+        change_machine_state(&ip.to_string(), "isolated");
         lock_ip(ip).ok();
     })));
 
@@ -45,6 +41,6 @@ async fn main() -> Result<(), Box<dyn Error>>
     let _web_server = task::spawn(run_web_server());
 
     loop {
-        sleep(Duration::from_millis(100));
+        sleep(Duration::from_millis(1000));
     }
 }

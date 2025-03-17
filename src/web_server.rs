@@ -13,7 +13,7 @@ pub async fn run_web_server()
 {
     let app = Router::new()
         .route("/api/machines", get(get_machines))
-        .nest_service("/", ServeDir::new("./ui/build"));
+        .fallback_service(ServeDir::new("./ui/build"));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 21335));
     println!("Web server running at http://{}", addr);
@@ -25,6 +25,6 @@ pub async fn run_web_server()
 
 async fn get_machines() -> Json<Vec<state::Machine>>
 {
-    let machines = state::get_machines().await;
-    Json(machines.clone())
+    let machines = state::get_machines();
+    Json(machines)
 }

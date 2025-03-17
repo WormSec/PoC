@@ -22,7 +22,7 @@ services:
       context: ./
     container_name: bravo
     ports:
-      - "8080:21335"
+      - "21335:21335"
     privileged: true
     networks:
       poc:
@@ -36,6 +36,23 @@ services:
     networks:
       poc:
         ipv4_address: 172.42.0.5
+  delta:
+    build:
+      context: ./
+    container_name: delta
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.6
+
+  echo:
+    build:
+      context: ./
+    container_name: echo
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.7
 
 networks:
   poc:

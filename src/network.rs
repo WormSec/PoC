@@ -26,13 +26,13 @@ pub fn start_network_watcher(callback: NetCallback)
     });
 }
 
-pub async fn broadcast(text: &IpAddr) -> io::Result<()>
+pub fn broadcast(text: &IpAddr) -> io::Result<()>
 {
     let socket = UdpSocket::bind("0.0.0.0:0")?;
 
     println!("Unusual action detected. Broadcasting info.");
 
-    for machine in state::get_machines().await {
+    for machine in state::get_machines() {
         let server = SocketAddr::new(IpAddr::from_str(&machine.ip).unwrap(), 21335);
         socket.send_to(text.to_string().as_bytes(), server)?;
     }
