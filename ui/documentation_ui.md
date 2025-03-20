@@ -44,6 +44,66 @@ interface Position {
 }
 ```
 
+## Style et Design
+
+L'application utilise un design sombre moderne avec des accents colorés. Le thème principal se compose de :
+
+- Fond principal : Dark (#1a1a1a)
+- Couleur d'accent principale : Violet (#6a3de8) pour l'en-tête et le pied de page
+- Couleur d'état connecté : Vert fluorescent (#00FF9D) avec des effets de lueur
+- Couleur d'état isolé : Rouge (#FF3333) avec des effets de lueur
+- Texte : Principalement blanc et nuances de gris pour une meilleure lisibilité
+
+### Structure de la Mise en Page
+
+L'application est structurée en trois sections principales :
+
+1. **En-tête** (Header) - Hauteur fixe de 60px, fond violet avec logo et titre
+2. **Contenu principal** (Main Content) - Occupe l'espace restant, contient le visualiseur et les informations
+3. **Pied de page** (Footer) - Hauteur fixe de 60px, fond violet avec liens sociaux
+
+```
++----------------------------------+
+|             Header               |
++----------------------------------+
+|                                  |
+|                                  |
+|          Main Content            |
+|                                  |
+|                                  |
++----------------------------------+
+|             Footer               |
++----------------------------------+
+```
+
+### Styles Spécifiques des Composants
+
+#### Header
+- Fond violet (#6a3de8)
+- Titre avec effet de lueur (text-shadow)
+- Logo de 40px x 40px aligné à gauche
+
+#### Visualizer
+- Occupe l'espace disponible (flex: 1)
+- Bordure blanche avec effet de lueur (box-shadow)
+- Contrôles de zoom en bas à droite avec des boutons semi-transparents
+
+#### Machine
+- Représentée par un cercle avec bordure colorée selon l'état
+- Texte en gras avec effet de lueur
+- Effet de lueur dynamique (filter: drop-shadow)
+- Cursor: pointer pour indiquer l'interactivité
+
+#### Information
+- Largeur fixe entre 250px et 300px
+- Bordure colorée selon l'état de la machine sélectionnée
+- Organisé en paires label/valeur
+- Labels en gris (#999999) et valeurs en blanc
+
+#### États Visuels
+- **Connected** : Bordure verte (#00FF9D) avec lueur verte
+- **Isolated** : Bordure rouge (#FF3333) avec lueur rouge
+
 ## Fonctionnalités Principales
 
 ### 1. Visualisation du Réseau
@@ -61,7 +121,7 @@ Le composant `Visualizer` affiche un graphe où:
 
 L'utilisateur peut:
 - **Sélectionner une machine** pour afficher ses détails
-- **Déplacer les machines** par glisser-déposer
+- **Déplacer les machines** par glisser-déposer (curseur "grab"/"grabbing")
 - **Zoomer/Dézoomer** avec la molette de la souris ou les boutons +/-
 - **Déplacer la vue** en maintenant le clic gauche et en déplaçant la souris
 - **Réinitialiser la disposition** avec le bouton Reset
@@ -80,6 +140,8 @@ Lorsqu'une machine est sélectionnée, le panneau `Information` s'affiche avec:
 - L'application interroge automatiquement l'API toutes les 10 secondes
 - Elle met à jour l'état des machines et leurs connexions
 - En cas d'erreur de l'API, des données d'exemple sont affichées
+- Indicateur de chargement (spinner) lors des requêtes
+- Message d'erreur et bouton "Retry" en cas d'échec
 
 ### 5. Persistance des Positions
 
@@ -116,6 +178,18 @@ root.render(
 );
 ```
 
+### Structure des fichiers CSS
+
+L'application utilise plusieurs fichiers CSS pour une meilleure organisation du code :
+
+- `index.css` - Styles globaux et réinitialisation
+- `App.css` - Structure principale de l'application et styles communs
+- `Header.css`, `Footer.css` - Styles spécifiques pour l'en-tête et le pied de page
+- `Visualizer.css` - Styles pour la zone de visualisation et ses contrôles
+- `Machine.css` - Styles pour la représentation des machines
+- `MachineLink.css` - Styles pour les connexions entre machines
+- `Information.css` - Styles pour le panneau d'informations
+
 ### Structure d'API Attendue
 
 L'API doit renvoyer un tableau de machines au format suivant:
@@ -139,6 +213,30 @@ L'API doit renvoyer un tableau de machines au format suivant:
     "status": "isolated"
   }
 ]
+```
+
+### Gestion des États de Chargement et d'Erreur
+
+L'application gère les états de chargement et d'erreur avec des composants dédiés :
+
+- **État de chargement** : Affiche un spinner animé
+- **État d'erreur** : Affiche un message d'erreur et un bouton pour réessayer
+
+```css
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #00FF9D;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 ```
 
 ### Tests
@@ -176,19 +274,25 @@ Ces tests utilisent la bibliothèque Testing Library pour tester les composants 
    - Vérifier que les types sont correctement définis et importés
    - S'assurer que les interfaces sont respectées dans l'implémentation
 
+4. **Problèmes d'affichage**
+   - Vérifier que les règles CSS ne sont pas en conflit
+   - S'assurer que tous les fichiers CSS sont importés dans les composants correspondants
+
 ## Évolutions Possibles
 
 1. Ajouter un filtrage des machines par statut
 2. Implémenter un historique des changements d'état
 3. Ajouter des statistiques sur l'état général du réseau
 4. Permettre la création de groupes de machines
-5. Implémenter un mode sombre pour l'interface
+5. Implémenter un mode clair en complément du mode sombre actuel
 6. Améliorer la couverture des tests unitaires
+7. Ajouter des animations de transition entre les états des machines
 
 ## Notes Techniques
 
 - L'application utilise React avec des hooks (useState, useEffect, useRef, useCallback)
 - TypeScript est utilisé pour le typage statique des données et composants
 - Les positions sont calculées dynamiquement en fonction du nombre de machines
-- L'application est réactive et s'adapte aux différentes tailles d'écran
+- L'application est responsive avec des styles flexbox
 - Les animations sont gérées via CSS pour des performances optimales
+- Les effets visuels (lueurs, ombres) utilisent les fonctionnalités CSS modernes comme `filter: drop-shadow` et `text-shadow`
