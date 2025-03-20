@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './MachineLink.css';
 
 interface MachineLinkProps {
@@ -16,9 +16,25 @@ const MachineLink: React.FC<MachineLinkProps> = ({
     targetY,
     type
 }) => {
+    const [previousType, setPreviousType] = useState<string>(type);
+    const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+    
     const isConnected = type === "connected";
     const strokeColor = isConnected ? "#00FF9D" : "#FF3333";
     const strokeDashArray = isConnected ? "none" : "5,5";
+    
+    useEffect(() => {
+        if (previousType !== type) {
+            setIsTransitioning(true);
+            
+            const timer = setTimeout(() => {
+                setIsTransitioning(false);
+                setPreviousType(type);
+            }, 1000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [type, previousType]);
     
     const angle = Math.atan2(targetY - sourceY, targetX - sourceX);
     
@@ -43,7 +59,7 @@ const MachineLink: React.FC<MachineLinkProps> = ({
     const reversePoint2Y = startY - arrowSize * Math.sin(reverseAngle + arrowAngle);
     
     return (
-        <g className={`machine-link machine-link-${type}`}>
+        <g className={`machine-link machine-link-${type} ${isTransitioning ? 'transitioning' : ''}`}>
             <line
                 x1={startX}
                 y1={startY}
@@ -52,6 +68,11 @@ const MachineLink: React.FC<MachineLinkProps> = ({
                 stroke={strokeColor}
                 strokeWidth="1.5"
                 strokeDasharray={strokeDashArray}
+                style={isTransitioning ? {
+                    animation: isConnected ? 
+                        'link-appear 0.5s ease-out' : 
+                        'dash-animation 20s linear infinite'
+                } : {}}
             />
             
             {isConnected && (
@@ -59,10 +80,12 @@ const MachineLink: React.FC<MachineLinkProps> = ({
                     <polygon 
                         points={`${endX},${endY} ${point1X},${point1Y} ${point2X},${point2Y}`}
                         fill={strokeColor}
+                        style={isTransitioning ? { animation: 'link-appear 0.5s ease-out' } : {}}
                     />
                     <polygon 
                         points={`${startX},${startY} ${reversePoint1X},${reversePoint1Y} ${reversePoint2X},${reversePoint2Y}`}
                         fill={strokeColor}
+                        style={isTransitioning ? { animation: 'link-appear 0.5s ease-out' } : {}}
                     />
                 </>
             )}

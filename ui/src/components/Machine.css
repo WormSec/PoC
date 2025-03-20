@@ -1,30 +1,6 @@
 .machine {
     cursor: pointer;
-}
-
-.machine-circle-connected {
-    fill: #1a1a1a;
-    stroke: #00FF9D;
-    stroke-width: 2;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
-}
-
-.machine-circle-connected {
-    fill: #1a1a1a;
-    stroke: #00FF9D;
-    stroke-width: 2;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
-}
-
-.machine {
-    cursor: pointer;
-}
-
-.machine-circle-isolated {
-    fill: #1a1a1a;
-    stroke: #FF3333;
-    stroke-width: 2;
-    filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.5));
+    animation: appear 0.5s ease-out;
 }
 
 .machine-text {
@@ -32,11 +8,42 @@
     user-select: none;
 }
 
+@keyframes pulse-connected {
+    0% { filter: drop-shadow(0 0 5px rgba(0, 255, 157, 0.3)); }
+    50% { filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.8)); }
+    100% { filter: drop-shadow(0 0 5px rgba(0, 255, 157, 0.3)); }
+}
+
+@keyframes pulse-isolated {
+    0% { filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.3)); }
+    50% { filter: drop-shadow(0 0 15px rgba(255, 51, 51, 0.8)); }
+    100% { filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.3)); }
+}
+
+.machine-circle-connected {
+    fill: #1a1a1a;
+    stroke: #00FF9D;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
+    transition: stroke 0.5s ease, filter 0.5s ease;
+    animation: pulse-connected 3s infinite ease-in-out;
+}
+
+.machine-circle-isolated {
+    fill: #1a1a1a;
+    stroke: #FF3333;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.5));
+    transition: stroke 0.5s ease, filter 0.5s ease;
+    animation: pulse-isolated 3s infinite ease-in-out;
+}
+
 .machine-text-connected {
     fill: #00FF9D;
     font-size: 2rem;
     font-weight: bold;
     text-shadow: 0 0 5px rgba(0, 255, 157, 0.8);
+    transition: fill 0.5s ease, text-shadow 0.5s ease;
 }
 
 .machine-text-isolated {
@@ -44,4 +51,10 @@
     font-size: 2rem;
     font-weight: bold;
     text-shadow: 0 0 5px rgba(255, 51, 51, 0.8);
+    transition: fill 0.5s ease, text-shadow 0.5s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
 }

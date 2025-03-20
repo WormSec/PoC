@@ -15,9 +15,11 @@ const App: React.FC = () => {
   const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null);
   const [machinePositions, setMachinePositions] = useState<Record<string, Position>>({});
   const [machines, setMachines] = useState<Machine[]>([]);
+  const [previousMachines, setPreviousMachines] = useState<Machine[]>([]);
   const [links, setLinks] = useState<Link[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [statusChanges, setStatusChanges] = useState<Record<string, boolean>>({});
   const visualizerRef = useRef<HTMLDivElement>(null);
   
   const generateLinks = (machinesList: Machine[]): Link[] => {
@@ -44,6 +46,29 @@ const App: React.FC = () => {
     return generatedLinks;
   };
   
+  // Détection des changements d'état des machines
+  useEffect(() => {
+    const changes: Record<string, boolean> = {};
+    
+    machines.forEach(machine => {
+      const previousMachine = previousMachines.find(m => m.id === machine.id);
+      if (previousMachine && previousMachine.status !== machine.status) {
+        changes[machine.id] = true;
+      }
+    });
+    
+    if (Object.keys(changes).length > 0) {
+      setStatusChanges(changes);
+      
+      // Réinitialiser après un délai
+      const timer = setTimeout(() => {
+        setStatusChanges({});
+      }, 1500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [machines, previousMachines]);
+  
   const fetchMachines = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -54,6 +79,9 @@ const App: React.FC = () => {
       }
       
       const data = await response.json();
+      
+      // Sauvegarder l'état précédent pour détecter les changements
+      setPreviousMachines(machines);
       setMachines(data);
       
       const newLinks = generateLinks(data);
@@ -78,12 +106,13 @@ const App: React.FC = () => {
         ];
         
         setMachines(sampleMachines);
+        setPreviousMachines(sampleMachines);
         setLinks(generateLinks(sampleMachines));
       }
     } finally {
       setIsLoading(false);
     }
-  }, [selectedMachine, machines.length]);
+  }, [selectedMachine, machines.length, machines]);
   
   // Initial fetch on component mount
   useEffect(() => {
@@ -152,6 +181,7 @@ const App: React.FC = () => {
               isReduced={selectedMachine !== null}
               initialPositions={machinePositions}
               onPositionsChange={updateMachinePositions}
+              statusChanges={statusChanges}
             />
           )}
         </div>
