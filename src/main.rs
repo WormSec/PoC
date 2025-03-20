@@ -21,11 +21,14 @@ async fn main() -> Result<(), Box<dyn Error>>
     let my_ip = local_ip()?;
     let ips = read_ips_from_file("./ips.txt")?;
 
+    println!("Loaded {} IPS: {:?}", ips.len(), ips);
+
     state::from_list(ips);
 
     println!("My IP: {my_ip}");
 
     let callback: Callback = Arc::new(Mutex::new(Box::new(move || {
+        change_machine_state(&my_ip.to_string(), "isolated");
         broadcast(&my_ip).ok();
     })));
 

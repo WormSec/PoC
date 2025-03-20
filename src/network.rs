@@ -33,8 +33,10 @@ pub fn broadcast(text: &IpAddr) -> io::Result<()>
     println!("Unusual action detected. Broadcasting info.");
 
     for machine in state::get_machines() {
-        let server = SocketAddr::new(IpAddr::from_str(&machine.ip).unwrap(), 21335);
-        socket.send_to(text.to_string().as_bytes(), server)?;
+        if IpAddr::from_str(&machine.ip).unwrap() != *text {
+            let server = SocketAddr::new(IpAddr::from_str(&machine.ip).unwrap(), 21335);
+            socket.send_to(text.to_string().as_bytes(), server)?;
+        }
     }
 
     Ok(())

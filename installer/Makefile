@@ -17,9 +17,25 @@ pack: build
 	@echo "    exit 1" >> $(PK_FILE)
 	@echo "fi" >> $(PK_FILE)
 	@echo >> $(PK_FILE)
-	@echo "echo \"Installing dependencies\""
+	@echo "echo \"Stoping previous install\"" >> $(PK_FILE)
+	@echo "systemctl stop wormsec" >> $(PK_FILE)
+	@echo "systemctl disable wormsec" >> $(PK_FILE)
+
+	@echo "iptables -P INPUT ACCEPT" >> $(PK_FILE)
+	@echo "iptables -P FORWARD ACCEPT" >> $(PK_FILE)
+	@echo "iptables -P OUTPUT ACCEPT" >> $(PK_FILE)
+
+	@echo "iptables -t nat -F" >> $(PK_FILE)
+	@echo "iptables -t mangle -F" >> $(PK_FILE)
+	@echo "iptables -F" >> $(PK_FILE)
+	@echo "iptables -X" >> $(PK_FILE)
+
+	@echo "echo \"Installing dependencies\"" >> $(PK_FILE)
 	@echo "apt-get update && apt-get install -y curl gcc" >> $(PK_FILE)
-	@echo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" >> $(PK_FILE)
+	@echo "if ! [ -x "\`command -v cargo\`" ]; then" >> $(PK_FILE)
+	@echo "    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" >> $(PK_FILE)
+	@echo "fi" >> $(PK_FILE)
+
 	@echo "---"
 	@for file in $(PACK_FILES); do \
 		echo "Adding file \"$$file\""; \
