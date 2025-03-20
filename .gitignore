@@ -1,8 +1,7 @@
 Cargo.lock
 .vscode/
 /target
-
-
+install.sh
 
 
 .DS_STORE

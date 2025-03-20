@@ -13,8 +13,8 @@ if [ $(test -r /var/run/docker.sock; echo "$?") -ne 0 ]; then
     SUDO="sudo"
 fi
 
-$SUDO docker stop target alpha bravo charlie delta echo
-$SUDO docker rm target alpha bravo charlie delta echo
+$SUDO docker compose stop
+$SUDO docker compose rm -f
 $SUDO docker network rm $($SUDO docker network ls -q) 2>/dev/null
 $SUDO docker volume rm $($SUDO docker volume ls -q) 2>/dev/null
 

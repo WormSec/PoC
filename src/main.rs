@@ -19,7 +19,7 @@ mod web_server;
 async fn main() -> Result<(), Box<dyn Error>>
 {
     let my_ip = local_ip()?;
-    let ips = read_ips_from_file("/app/ips.txt")?;
+    let ips = read_ips_from_file("./ips.txt")?;
 
     state::from_list(ips);
 
