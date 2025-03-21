@@ -2,8 +2,25 @@ use std::{io, net::{IpAddr, SocketAddr, UdpSocket}, str::FromStr, sync::{Arc, Mu
 
 use crate::state;
 
+/// A type alias for a callback function that accepts an IP address and performs an action.
+///
+/// The callback is wrapped in a `Mutex` to allow for safe concurrent access and 
+/// in an `Arc` to allow sharing between threads. It is expected to take an `IpAddr`
+/// and return nothing (i.e., it's a side-effecting function).
 pub type NetCallback = Arc<Mutex<Box<dyn Fn(IpAddr) + Send + 'static>>>;
 
+/// Starts a network watcher that listens for incoming UDP packets and invokes the callback when an IP address is received.
+///
+/// This function listens on a specific port (`21335`), expecting to receive UDP packets containing an
+/// IP address. When a valid IP address is received, the provided callback function is called with
+/// the IP address, allowing the application to act on the detected IP (e.g., locking it).
+///
+/// The function runs in a separate thread to handle incoming data asynchronously.
+///
+/// # Arguments
+///
+/// * `callback` - A callback function wrapped in an `Arc<Mutex<Box<dyn Fn(IpAddr) + Send + 'static>>>`.
+///   This callback is triggered whenever a valid IP address is received.
 pub fn start_network_watcher(callback: NetCallback)
 {
     thread::spawn(move || {
@@ -26,6 +43,24 @@ pub fn start_network_watcher(callback: NetCallback)
     });
 }
 
+
+/// Broadcasts the provided IP address to all other machines in the state.
+///
+/// This function sends the provided IP address to all other machines except the local machine.
+/// It uses UDP to send the IP address to each machine in the list of machines stored in the state,
+/// on port `21335`. The function is typically used when an unusual action is detected
+/// and needs to be communicated to other machines.
+///
+/// # Arguments
+///
+/// * `text` - The IP address to broadcast to the other machines.
+///
+/// # Returns
+///
+/// This function returns a `io::Result<()>` indicating whether the broadcasting was successful.
+/// 
+/// * `Ok(())` if the broadcast was successfully sent.
+/// * `Err(io::Error)` if there was an error while sending the UDP message.
 pub fn broadcast(text: &IpAddr) -> io::Result<()>
 {
     let socket = UdpSocket::bind("0.0.0.0:0")?;

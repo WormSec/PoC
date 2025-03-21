@@ -15,6 +15,32 @@ mod utils;
 mod watcher;
 mod web_server;
 
+/// The main entry point for the application.
+///
+/// This is an asynchronous function that performs the following:
+/// 1. Retrieves the local IP address of the machine.
+/// 2. Loads a list of IP addresses from a file (`ips.txt`).
+/// 3. Initializes the application state based on the loaded IP addresses.
+///
+/// It sets up a watcher that monitors network activity and performs actions when a specific IP
+/// is encountered. It also starts a web server asynchronously and runs in a loop waiting for events.
+///
+/// # Workflow:
+///
+/// 1. The function starts by loading the local IP of the current machine (`my_ip`).
+/// 2. The list of IP addresses is read from a file (`ips.txt`), and the state is initialized using these IPs.
+/// 3. It sets up two types of callbacks:
+///    - **General callback** (`callback`) for handling machine state transitions when specific IPs are detected.
+///    - **Network callback** (`net_callback`) to trigger actions when network activity with certain IPs is observed.
+/// 4. A **network watcher** and a **local callback handler** are set up to monitor the system and change the machine state and lock IPs if necessary.
+/// 5. The web server (`run_web_server`) is spawned asynchronously to handle web requests or status updates.
+/// 6. The function enters an infinite loop (`loop { sleep(Duration::from_millis(1000)); }`) to keep the program running.
+///
+/// # Returns
+///
+/// This function returns a `Result<(), Box<dyn Error>>`:
+/// * `Ok(())` on successful execution.
+/// * `Err(Box<dyn Error>)` if any error occurs during execution (e.g., reading the IPs, initializing state, etc.).
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>>
 {
