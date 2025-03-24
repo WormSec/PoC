@@ -76,3 +76,21 @@ pub fn broadcast(text: &IpAddr) -> io::Result<()>
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_broadcast_function() {
+        state::from_list(vec![
+            IpAddr::from_str("127.0.0.1").unwrap()
+        ]);
+
+        let ip_to_broadcast = IpAddr::from_str("192.168.1.3").unwrap();
+        let result = broadcast(&ip_to_broadcast);
+
+        assert!(result.is_ok());
+
+    }
+}

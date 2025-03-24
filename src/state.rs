@@ -86,3 +86,93 @@ pub fn from_list(ip_list: Vec<IpAddr>)
         })
         .collect();
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::net::{Ipv4Addr, IpAddr};
+
+    fn reset_machines() {
+        let mut machines = MACHINES.lock().unwrap();
+        machines.clear();
+    }
+
+    #[test]
+    fn test_get_machines_empty() {
+        reset_machines();
+
+        let machines = get_machines();
+        assert!(machines.is_empty());
+    }
+
+    #[test]
+    fn test_get_machines_non_empty() {
+        reset_machines();
+
+        let ip_list = vec![
+            Ipv4Addr::new(192, 168, 1, 1).into(),
+            Ipv4Addr::new(127, 0, 0, 1).into(),
+        ];
+        from_list(ip_list);
+
+        let machines = get_machines();
+        assert_eq!(machines.len(), 2);
+        assert_eq!(machines[0].ip, "192.168.1.1");
+        assert_eq!(machines[1].ip, "127.0.0.1");
+    }
+
+    #[test]
+    fn test_change_machine_state() {
+        reset_machines();
+
+        let ip_list = vec![Ipv4Addr::new(192, 168, 1, 1).into()];
+        from_list(ip_list);
+
+        change_machine_state("192.168.1.1", "isolated");
+
+        let machines = get_machines();
+        assert_eq!(machines[0].status, "isolated");
+    }
+
+    #[test]
+    fn test_change_machine_state_non_existent_ip() {
+        reset_machines();
+
+        let ip_list = vec![Ipv4Addr::new(192, 168, 1, 1).into()];
+        from_list(ip_list);
+
+        change_machine_state("10.0.0.1", "isolated");
+
+        let machines = get_machines();
+        assert_eq!(machines[0].status, "connected");
+    }
+
+    #[test]
+    fn test_from_list() {
+        reset_machines();
+
+        let ip_list = vec![
+            Ipv4Addr::new(192, 168, 1, 1).into(),
+            Ipv4Addr::new(127, 0, 0, 1).into(),
+            Ipv4Addr::new(8, 8, 8, 8).into(),
+        ];
+        from_list(ip_list);
+
+        let machines = get_machines();
+        assert_eq!(machines.len(), 3);
+        assert_eq!(machines[0].ip, "192.168.1.1");
+        assert_eq!(machines[1].ip, "127.0.0.1");
+        assert_eq!(machines[2].ip, "8.8.8.8");
+    }
+
+    #[test]
+    fn test_from_list_empty_ip_list() {
+        reset_machines();
+
+        let ip_list: Vec<IpAddr> = vec![];
+        from_list(ip_list);
+
+        let machines = get_machines();
+        assert!(machines.is_empty());
+    }
+}

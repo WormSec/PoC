@@ -22,7 +22,7 @@ services:
       context: ./
     container_name: bravo
     ports:
-      - "21335:21335"
+      - "8080:21335"
     privileged: true
     networks:
       poc:
@@ -32,6 +32,8 @@ services:
     build:
       context: ./
     container_name: charlie
+    ports:
+      - "8081:21335"
     privileged: true
     networks:
       poc:
