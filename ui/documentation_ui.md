@@ -1,4 +1,4 @@
-# Documentation du Projet WormSec
+# Documentation Front
 
 ## Présentation Générale
 
@@ -147,6 +147,51 @@ Lorsqu'une machine est sélectionnée, le panneau `Information` s'affiche avec:
 
 - Les positions des machines sont sauvegardées dans le localStorage
 - Elles sont restaurées lorsque l'utilisateur revient sur l'application
+
+## 6. Navigation au Clavier
+
+La navigation au clavier est un aspect essentiel de l'accessibilité et de l'ergonomie de WormSec. Elle permet aux utilisateurs de naviguer et d'interagir avec l'application sans utiliser la souris.
+
+### Modes de Navigation
+
+#### Navigation dans le Visualiseur
+
+1. **Sélection des Machines**
+   - Touches fléchées (↑, ↓, ←, →) : Déplacement entre les machines
+   - Touche `Enter` ou `Espace` : Sélectionner une machine
+   - Touche `Échap` : Désélectionner la machine courante
+
+2. **Contrôles de Vue**
+   - `+` et `-` : Zoomer et dézoomer
+   - `0` : Réinitialiser le zoom à la vue par défaut
+   - `R` : Réinitialiser la disposition des machines
+
+3. **Navigation Globale**
+   - `Tab` : Naviguer entre les éléments interactifs (machines, boutons de contrôle)
+   - `Shift + Tab` : Navigation inverse
+
+#### Panneau d'Informations
+
+1. **Interaction**
+   - Flèches (↑, ↓) : Faire défiler les informations détaillées
+   - `Ctrl + C` : Copier l'adresse IP ou MAC
+   - `F` : Basculer en mode plein écran pour les détails
+
+### Indicateurs Visuels
+
+- Un outline coloré (par exemple en vert fluorescent `#00FF9D`) indique l'élément actuellement focus
+- Un effet de pulsation subtil signale l'élément sélectionné
+
+## Évolutions Possibles
+
+1. Ajouter un filtrage des machines par statut
+2. Implémenter un historique des changements d'état
+3. Ajouter des statistiques sur l'état général du réseau
+4. Permettre la création de groupes de machines
+5. Implémenter un mode clair en complément du mode sombre actuel
+6. Améliorer la couverture des tests unitaires
+7. Ajouter des animations de transition entre les états des machines
+8. **Améliorer la personnalisation de la navigation au clavier**
 
 ## Flux de Données
 
