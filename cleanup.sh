@@ -8,13 +8,18 @@ read
 echo "Purgeing docker"
 
 SUDO=""
+DOCKER_COMPOSE="docker-compose"
+
+if ! command -v $DOCKER_COMPOSE 2>&1 >/dev/null; then
+    DOCKER_COMPOSE="docker compose"
+fi
 
 if [ $(test -r /var/run/docker.sock; echo "$?") -ne 0 ]; then
     SUDO="sudo"
 fi
 
-$SUDO docker compose stop
-$SUDO docker compose rm -f
+$SUDO $DOCKER_COMPOSE stop
+$SUDO $DOCKER_COMPOSE rm -f
 $SUDO docker network rm $($SUDO docker network ls -q) 2>/dev/null
 $SUDO docker volume rm $($SUDO docker volume ls -q) 2>/dev/null
 
