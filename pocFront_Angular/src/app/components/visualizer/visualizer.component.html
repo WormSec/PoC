@@ -1,0 +1,67 @@
+<div [class.visualizer]="true" [class.reduced]="isReduced">
+  <svg 
+    #svgElement
+    width="100%" 
+    height="100%" 
+    [attr.viewBox]="getViewBoxString()"
+    (mousedown)="handleSvgMouseDown($event)"
+    (mousemove)="handleSvgMouseMove($event)"
+    (mouseup)="handleSvgMouseUp()"
+    (mouseleave)="handleSvgMouseLeave()"
+    (wheel)="handleWheel($event)"
+    xmlns="http://www.w3.org/2000/svg">
+    
+    <ng-container *ngFor="let link of links; trackBy: trackByLinkIndex">
+      <g *ngIf="positions[link.source] && positions[link.target]">
+        <line
+          [attr.x1]="getLinkStartX(link)"
+          [attr.y1]="getLinkStartY(link)"
+          [attr.x2]="getLinkEndX(link)"
+          [attr.y2]="getLinkEndY(link)"
+          [attr.stroke]="getLinkColor(link)"
+          stroke-width="2"
+          [attr.stroke-dasharray]="getLinkDashArray(link)"
+          stroke-linecap="round" />
+      </g>
+    </ng-container>
+    
+    <ng-container *ngFor="let machine of machines; trackBy: trackByMachineId">
+      <g 
+        *ngIf="positions[machine.id]"
+        [attr.transform]="'translate(' + positions[machine.id].x + ', ' + positions[machine.id].y + ')'"
+        (mousedown)="handleMachineDragStart(machine.id, $event)"
+        (click)="onMachineClick(machine)"
+        style="cursor: pointer;">
+        
+        <circle 
+          cx="0" 
+          cy="0" 
+          r="30"
+          fill="#1a1a1a"
+          [attr.stroke]="machine.status === 'connected' ? '#00FF9D' : '#FF3333'"
+          stroke-width="3"
+          [attr.filter]="machine.status === 'connected' 
+            ? 'drop-shadow(0 0 10px rgba(0, 255, 157, 0.8))' 
+            : 'drop-shadow(0 0 10px rgba(255, 51, 51, 0.8))'" />
+        
+        <text 
+          x="0" 
+          y="8" 
+          text-anchor="middle"
+          [attr.fill]="machine.status === 'connected' ? '#00FF9D' : '#FF3333'"
+          font-size="28"
+          font-weight="bold"
+          style="user-select: none; pointer-events: none;">
+          {{ machine.name }}
+        </text>
+      </g>
+    </ng-container>
+  </svg>
+  
+  <!-- Zoom controls -->
+  <div class="visualizer-controls">
+    <button (click)="handleZoomIn()" class="zoom-button">+</button>
+    <button (click)="handleZoomOut()" class="zoom-button">-</button>
+    <button (click)="handleResetPositions()" class="zoom-button">Reset</button>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+@keyframes dash-animation {
+    to { 
+        stroke-dashoffset: -20; 
+    }
+}
+
+@keyframes link-appear {
+    from { 
+        opacity: 0; 
+    }
+    to { 
+        opacity: 1; 
+    }
+}
+
+.machine-link {
+    pointer-events: none;
+    animation: link-appear 0.5s ease-out;
+
+    line {
+        transition: stroke 0.5s ease, stroke-dasharray 0.5s ease;
+    }
+
+    polygon {
+        transition: fill 0.5s ease;
+    }
+}
+
+.machine-link-connected {
+    line {
+        stroke: #00FF9D;
+        stroke-width: 1.5;
+    }
+}
+
+.machine-link-isolated {
+    line {
+        stroke: #FF3333;
+        stroke-width: 1.5;
+        stroke-dasharray: 5,5;
+        animation: dash-animation 20s linear infinite;
+    }
+}

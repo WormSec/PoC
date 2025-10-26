@@ -1,0 +1,49 @@
+.machine {
+  cursor: pointer;
+}
+
+.machine-circle {
+  transition: stroke 0.5s ease, filter 0.5s ease;
+}
+
+.machine-circle-connected {
+  fill: #1a1a1a;
+  stroke: #00FF9D;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.5));
+}
+
+.machine-circle-isolated {
+  fill: #1a1a1a;
+  stroke: #FF3333;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.5));
+}
+
+.machine-text {
+  font-weight: bold;
+  user-select: none;
+  font-size: 28px;
+}
+
+.machine-text-connected {
+  fill: #00FF9D;
+  text-shadow: 0 0 5px rgba(0, 255, 157, 0.8);
+}
+
+.machine-text-isolated {
+  fill: #FF3333;
+  text-shadow: 0 0 5px rgba(255, 51, 51, 0.8);
+}
+
+@keyframes pulse-connected {
+  0% { filter: drop-shadow(0 0 5px rgba(0, 255, 157, 0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.8)); }
+  100% { filter: drop-shadow(0 0 5px rgba(0, 255, 157, 0.3)); }
+}
+
+@keyframes pulse-isolated {
+  0% { filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.3)); }
+  50% { filter: drop-shadow(0 0 15px rgba(255, 51, 51, 0.8)); }
+  100% { filter: drop-shadow(0 0 5px rgba(255, 51, 51, 0.3)); }
+}

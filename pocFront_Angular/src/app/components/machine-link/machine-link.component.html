@@ -1,0 +1,21 @@
+<g style="pointer-events: none;">
+  <line
+    [attr.x1]="startX"
+    [attr.y1]="startY"
+    [attr.x2]="endX"
+    [attr.y2]="endY"
+    [attr.stroke]="strokeColor"
+    stroke-width="2"
+    [attr.stroke-dasharray]="strokeDashArray"
+    stroke-linecap="round" />
+  
+  <ng-container *ngIf="type === 'connected'">
+    <polygon 
+      [attr.points]="getPointsString(endX, endY, point1X, point1Y, point2X, point2Y)"
+      [attr.fill]="strokeColor" />
+    
+    <polygon 
+      [attr.points]="getPointsString(startX, startY, reversePoint1X, reversePoint1Y, reversePoint2X, reversePoint2Y)"
+      [attr.fill]="strokeColor" />
+  </ng-container>
+</g>

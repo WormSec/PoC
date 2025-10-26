@@ -1,0 +1,19 @@
+<app-header></app-header>
+
+<div class="main-content">
+  <app-information 
+    *ngIf="selectedMachine"
+    [machine]="selectedMachine">
+  </app-information>
+  
+  <app-visualizer
+    [machines]="machines"
+    [links]="links"
+    [isReduced]="!!selectedMachine"
+    [initialPositions]="positions"
+    (machineClick)="onMachineClick($event)"
+    (positionsChange)="onPositionsChange($event)">
+  </app-visualizer>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,51 @@
+<div 
+    [attr.class]="'information' + (isTransitioning ? ' transitioning' : '')"
+    [attr.data-status]="machine.status">
+    
+    <div class="info-header">
+        <svg width="60" height="60" viewBox="0 0 80 80">
+        <circle 
+            [attr.class]="'machine-circle-small ' + circleClass"
+            cx="40" 
+            cy="40" 
+            r="30"
+            [style.animation]="getAnimationStyle()" />
+        
+        <text 
+            [attr.class]="'machine-text-small ' + textClass"
+            x="40" 
+            y="40" 
+            text-anchor="middle" 
+            dominant-baseline="central">
+            {{ machine.name }}
+        </text>
+        </svg>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">ID :</div> 
+        <div class="info-value">{{ getPaddedId() }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">IP :</div> 
+        <div class="info-value">{{ machine.ip }}</div>
+    </div>
+    
+    <div class="info-item" *ngIf="machine.mac">
+        <div class="info-label">MAC :</div> 
+        <div class="info-value">{{ machine.mac }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Last update :</div> 
+        <div class="info-value">{{ machine.lastUpdate }}</div>
+    </div>
+    
+    <div class="info-item">
+        <div class="info-label">Status :</div> 
+        <div [attr.class]="'info-value ' + (machine.status === 'connected' ? 'status-connected' : 'status-isolated')">
+        {{ machine.status }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<g 
+  (click)="handleClick($event)"
+  [attr.transform]="'translate(' + x + ', ' + y + ')'"
+  style="cursor: pointer;">
+  
+  <circle 
+    [attr.class]="'machine-circle ' + circleClass"
+    cx="0" 
+    cy="0" 
+    r="30"
+    [style.animation]="getAnimationStyle()" />
+  
+  <text 
+    [attr.class]="'machine-text ' + textClass"
+    x="0" 
+    y="0" 
+    text-anchor="middle" 
+    dominant-baseline="central">
+    {{ machine.name }}
+  </text>
+</g>
