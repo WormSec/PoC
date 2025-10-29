@@ -41,3 +41,37 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+### Previous Rust Gitignore ###
+
+Cargo.lock
+.vscode/
+/target
+install.sh
+
+
+.DS_STORE
+node_modules
+scripts/flow/*/.flowconfig
+.flowconfig
+*~
+*.pyc
+.grunt
+_SpecRunner.html
+__benchmarks__
+build/
+remote-repo/
+coverage/
+.module-cache
+fixtures/dom/public/react-dom.js
+fixtures/dom/public/react.js
+test/the-files-to-test.generated.js
+*.log*
+chrome-user-data
+*.sublime-project
+*.sublime-workspace
+.idea
+*.iml
+.vscode
+*.swp
+*.swo

@@ -1,0 +1,65 @@
+services:
+  target:
+    build:
+      context: ./
+    container_name: target
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.2
+
+  alpha:
+    build:
+      context: ./
+    container_name: alpha
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.3
+
+  bravo:
+    build:
+      context: ./
+    container_name: bravo
+    ports:
+      - "8080:21335"
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.4
+
+  charlie:
+    build:
+      context: ./
+    container_name: charlie
+    ports:
+      - "8081:21335"
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.5
+  delta:
+    build:
+      context: ./
+    container_name: delta
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.6
+
+  echo:
+    build:
+      context: ./
+    container_name: echo
+    privileged: true
+    networks:
+      poc:
+        ipv4_address: 172.42.0.7
+
+networks:
+  poc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.42.0.0/24
+          gateway: 172.42.0.1

@@ -1,0 +1,13 @@
+[Unit]
+Description=WormSec PoC
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/etc/wormsec/
+ExecStart=/etc/wormsec/wormsec
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

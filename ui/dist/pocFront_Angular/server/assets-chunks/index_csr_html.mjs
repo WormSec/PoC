@@ -1,0 +1,14 @@
+export default `<!doctype html>
+<html lang="en" data-beasties-container="">
+<head>
+  <meta charset="utf-8">
+  <title>PocFrontAngular</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;width:100%;margin:0;padding:0;font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;background-color:#1a1a1a;color:#fff;overflow:hidden}</style><link rel="stylesheet" href="styles-45TVYQQF.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-45TVYQQF.css"></noscript></head>
+<body ngcm="">
+  <app-root></app-root>
+<script src="main-NQG77QCG.js" type="module"></script></body>
+</html>
+`;
